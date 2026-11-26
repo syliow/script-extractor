@@ -1,5 +1,5 @@
 export interface Answer {
-  question: string
+  question: string | null
   response: string | null
 }
 
@@ -11,9 +11,4 @@ export interface ScriptResult {
 
 export interface ExtractResponse {
   results: ScriptResult[]
-}
-
-export interface ModelAnswer {
-  index: number
-  response: string | null
 }

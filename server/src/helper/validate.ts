@@ -1,8 +1,7 @@
 import { MAX_FILE_BYTES, MAX_FILES } from '../constant/limits.ts'
 
-// Checks the upload before any model call.
-// Returns the exam questions when the upload is allowed.
-export async function validateExtractRequest(files: File[], questionsField: string | null): Promise<string[]> {
+// Checks the uploaded PDFs before any model call.
+export async function validateExtractRequest(files: File[]): Promise<void> {
   if (files.length === 0) {
     throw new Error('Upload at least one PDF.')
   }
@@ -27,34 +26,4 @@ export async function validateExtractRequest(files: File[], questionsField: stri
       throw new Error(`${file.name} is not a PDF.`)
     }
   }
-
-  return readQuestions(questionsField)
-}
-
-// The form sends questions as one text field, for example ["Q1. ..."].
-function readQuestions(questionsField: string | null): string[] {
-  if (!questionsField || questionsField.trim() === '') {
-    throw new Error('Add at least one question.')
-  }
-
-  let questions: unknown
-  try {
-    questions = JSON.parse(questionsField)
-  } catch {
-    throw new Error('Questions must be a list of strings.')
-  }
-
-  if (!Array.isArray(questions) || questions.length === 0) {
-    throw new Error('Questions must be a list of strings.')
-  }
-
-  const list: string[] = []
-  for (const question of questions) {
-    if (typeof question !== 'string' || question.trim() === '') {
-      throw new Error('Questions must be a list of strings.')
-    }
-    list.push(question)
-  }
-
-  return list
 }
