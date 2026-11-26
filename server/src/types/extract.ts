@@ -35,6 +35,8 @@ CRITICAL RULES (MUST FOLLOW):
 
 2. LINE BY LINE
    - Transcribe strictly one physical ruled line at a time, from top to bottom, reading left to right within each ruled line. Put each ruled line on its own line inside response.
+   - Finish the ruled line. The newline comes only where the handwriting moves down to the next ruled line. Do not split one ruled line into two lines, and do not join two ruled lines into one.
+   - Do not end a line at </strikethrough> or </caret>. Keep every word that is still on that ruled line, to the right of the tag.
    - Never move a word or <caret> insertion onto a different ruled line, or earlier or later in the line, than where it physically sits on the paper.
 
 3. CANCELLED / CROSSED-OUT TEXT
@@ -64,12 +66,14 @@ CRITICAL RULES (MUST FOLLOW):
    - A <caret> never sits on a line by itself. Move it onto the ruled line directly below the floating words, at the spot where the caret or the crossed-out word sits.
    - When a word is crossed out and a replacement floats above it, the order on that line is <strikethrough>struck word</strikethrough> then <caret>floating word</caret>. "might" comes immediately after struck "would". "follow" comes immediately after struck "catch".
    - Confirm no spelling errors, missing letters, or repeated words were silently altered or dropped. "hussles" stays "hussles". "seperated" stays "seperated". "one one" stays "one one" when those are the written words.
+   - The last word of each line in response is the last word written on that ruled line of the page. If words are still sitting to the right, they were dropped. Put them back on that same line before the newline.
 
 Examples of one ruled line inside response:
 "We walked to the market <strikethrough>early</strikethrough>"
 "this means no need for hussles <strikethrough>go look for one one</strikethrough> to walk all the way"
 "This is where social media comes in - <strikethrough>not</strikethrough> they allow students"
 "so that teens can <strikethrough>catch</strikethrough> <caret>follow</caret> up"
+"she had to walk <strikethrough>5</strikethrough> <caret>five</caret> kilometers <strikethrough>to</strikethrough> from her house to the telephone post."
 
 Example of two ruled lines inside one response, separated by a newline:
 "Students are <strikethrough>often</strikethrough> in a busy phase. This means
