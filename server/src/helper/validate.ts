@@ -1,41 +1,60 @@
 import { MAX_FILE_BYTES, MAX_FILES } from '../constant/limits.ts'
 
+// Checks the upload before any model call.
+// Returns the exam questions when the upload is allowed.
 export async function validateExtractRequest(files: File[], questionsField: string | null): Promise<string[]> {
   if (files.length === 0) {
-    throw new Error('At least one PDF is required.')
+    throw new Error('Upload at least one PDF.')
   }
+
   if (files.length > MAX_FILES) {
-    throw new Error('At most 10 PDFs are allowed.')
+    throw new Error('Upload at most 10 PDFs.')
   }
-  if (files.some((file) => file.size > MAX_FILE_BYTES)) {
-    throw new Error('Each PDF must be 25 MB or smaller.')
-  }
-  if (new Set(files.map((file) => file.name)).size !== files.length) {
-    throw new Error('Filenames must be unique.')
+
+  const filenames = files.map((file) => file.name)
+  if (new Set(filenames).size !== filenames.length) {
+    throw new Error('Each PDF needs its own filename.')
   }
 
   for (const file of files) {
-    const header = new Uint8Array(await file.slice(0, 4).arrayBuffer())
-    const isPdf = header[0] === 0x25 && header[1] === 0x50 && header[2] === 0x44 && header[3] === 0x46
-    if (!isPdf) {
-      throw new Error('Only PDF files are allowed.')
+    if (file.size > MAX_FILE_BYTES) {
+      throw new Error(`${file.name} is larger than 25 MB.`)
+    }
+
+    // Every PDF starts with the characters %PDF.
+    const header = await file.slice(0, 4).text()
+    if (header !== '%PDF') {
+      throw new Error(`${file.name} is not a PDF.`)
     }
   }
 
-  let parsed: unknown
+  return readQuestions(questionsField)
+}
+
+// The form sends questions as one text field, for example ["Q1. ..."].
+function readQuestions(questionsField: string | null): string[] {
+  if (!questionsField || questionsField.trim() === '') {
+    throw new Error('Add at least one question.')
+  }
+
+  let questions: unknown
   try {
-    parsed = JSON.parse(questionsField ?? '')
+    questions = JSON.parse(questionsField)
   } catch {
-    parsed = null
+    throw new Error('Questions must be a list of strings.')
   }
 
-  if (
-    !Array.isArray(parsed) ||
-    parsed.length === 0 ||
-    parsed.some((question) => typeof question !== 'string' || question.trim() === '')
-  ) {
-    throw new Error('Questions must be a JSON array of strings.')
+  if (!Array.isArray(questions) || questions.length === 0) {
+    throw new Error('Questions must be a list of strings.')
   }
 
-  return parsed
+  const list: string[] = []
+  for (const question of questions) {
+    if (typeof question !== 'string' || question.trim() === '') {
+      throw new Error('Questions must be a list of strings.')
+    }
+    list.push(question)
+  }
+
+  return list
 }

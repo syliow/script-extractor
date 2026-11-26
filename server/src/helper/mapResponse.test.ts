@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { it } from 'node:test'
 import { mapAnswers } from './mapResponse.ts'
 
-it('copies the request question and keeps a missing answer null', () => {
+it('keeps the original question and uses null when that question was not answered', () => {
   const answers = mapAnswers(
     ['Q1. Write about a friend.', 'Q2. What do you value?'],
     [{ index: 0, response: 'I value loyalty.' }],

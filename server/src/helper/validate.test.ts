@@ -10,42 +10,40 @@ function pdf(name: string): File {
 }
 
 describe('validateExtractRequest', () => {
-  it('rejects a request with no files', async () => {
-    await assert.rejects(validateExtractRequest([], questions), /At least one PDF is required/)
+  it('asks for a PDF when none was uploaded', async () => {
+    await assert.rejects(validateExtractRequest([], questions), /Upload at least one PDF/)
   })
 
-  it('rejects more than 10 files', async () => {
+  it('stops at 10 PDFs', async () => {
     const files = Array.from({ length: 11 }, (_, index) => pdf(`student_${index}.pdf`))
-    await assert.rejects(validateExtractRequest(files, questions), /At most 10 PDFs are allowed/)
+    await assert.rejects(validateExtractRequest(files, questions), /at most 10 PDFs/)
   })
 
-  it('rejects a file larger than 25 MB', async () => {
+  it('stops a file over 25 MB', async () => {
     const file = pdf('big.pdf')
     Object.defineProperty(file, 'size', { value: MAX_FILE_BYTES + 1 })
-    await assert.rejects(validateExtractRequest([file], questions), /25 MB or smaller/)
+    await assert.rejects(validateExtractRequest([file], questions), /larger than 25 MB/)
   })
 
-  it('rejects a file that is not a PDF', async () => {
-    await assert.rejects(
-      validateExtractRequest([new File(['hello'], 'notes.txt')], questions),
-      /Only PDF files are allowed/,
-    )
+  it('stops a file that is not a PDF', async () => {
+    const notes = new File(['hello'], 'notes.txt')
+    await assert.rejects(validateExtractRequest([notes], questions), /is not a PDF/)
   })
 
-  it('rejects duplicate filenames', async () => {
-    await assert.rejects(validateExtractRequest([pdf('same.pdf'), pdf('same.pdf')], questions), /Filenames must be unique/)
+  it('stops two files with the same name', async () => {
+    await assert.rejects(validateExtractRequest([pdf('same.pdf'), pdf('same.pdf')], questions), /own filename/)
   })
 
-  it('rejects missing or invalid questions', async () => {
+  it('stops a missing or unusable question list', async () => {
     const files = [pdf('student.pdf')]
-    await assert.rejects(validateExtractRequest(files, null), /JSON array of strings/)
-    await assert.rejects(validateExtractRequest(files, ''), /JSON array of strings/)
-    await assert.rejects(validateExtractRequest(files, '[]'), /JSON array of strings/)
-    await assert.rejects(validateExtractRequest(files, '{'), /JSON array of strings/)
-    await assert.rejects(validateExtractRequest(files, '[1]'), /JSON array of strings/)
+    await assert.rejects(validateExtractRequest(files, null), /at least one question/)
+    await assert.rejects(validateExtractRequest(files, ''), /at least one question/)
+    await assert.rejects(validateExtractRequest(files, '[]'), /list of strings/)
+    await assert.rejects(validateExtractRequest(files, '{'), /list of strings/)
+    await assert.rejects(validateExtractRequest(files, '[1]'), /list of strings/)
   })
 
-  it('returns the question strings for a valid PDF', async () => {
+  it('returns the questions when the upload is valid', async () => {
     const result = await validateExtractRequest([pdf('student.pdf')], questions)
     assert.deepEqual(result, ['Q1. Write about a friend.'])
   })
