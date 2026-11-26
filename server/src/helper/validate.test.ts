@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
 import { describe, it } from 'node:test'
 import { ERRORS } from '../constant/errors.ts'
 import { MAX_FILE_BYTES } from '../constant/limits.ts'
@@ -25,11 +26,14 @@ describe('validateExtractRequest', () => {
   })
 
   it('rejects a file that does not start with %PDF', async () => {
-    const notes = new File(['hello'], 'notes.txt')
-    await assert.rejects(validateExtractRequest([notes]), { message: ERRORS.NOT_PDF('notes.txt') })
+    const bytes = await readFile('../sample/random_text.txt')
+    const notes = new File([bytes], 'random_text.txt')
+    await assert.rejects(validateExtractRequest([notes]), { message: ERRORS.NOT_PDF('random_text.txt') })
   })
 
-  it('accepts one valid PDF', async () => {
-    await validateExtractRequest([pdf('student.pdf')])
+  it('accepts the sample PDF', async () => {
+    const bytes = await readFile('../sample/ocr-assessment-sample.pdf')
+    const sample = new File([bytes], 'ocr-assessment-sample.pdf')
+    await validateExtractRequest([sample])
   })
 })
