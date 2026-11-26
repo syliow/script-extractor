@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env src/index.ts"
+    "start": "node --env-file=.env src/index.ts",
+    "test": "node --test src/helper/validate.test.ts"
   },
   "dependencies": {
     "express": "^4.21.2"
