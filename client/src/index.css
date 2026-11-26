@@ -1,0 +1,158 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1.5rem;
+  background: #f3f3f3;
+  color: #222;
+  font-family: system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: min(72rem, calc(100vw - 3rem));
+  height: calc(100vh - 3rem);
+  flex: none;
+  padding: 2.5rem 2rem;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+main > p {
+  margin: 0 0 1.5rem;
+  color: #555;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+input[type='file'] {
+  width: auto;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ccc;
+}
+
+button.clear {
+  width: auto;
+  padding: 0.15rem 0.5rem;
+  background: white;
+  color: #222;
+  font-size: 0.85rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #222;
+  background: #222;
+  color: white;
+  font: inherit;
+}
+
+button:disabled {
+  border-color: #999;
+  background: #999;
+}
+
+button.clear:disabled {
+  border-color: #ccc;
+  background: white;
+  color: #999;
+}
+
+.message {
+  margin: 0 0 1rem;
+  color: #9b1c1c;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+.sheet-bar {
+  display: flex;
+  justify-content: flex-end;
+  height: 2.25rem;
+  margin-top: 0.75rem;
+  flex: none;
+}
+
+button.results-clear {
+  width: auto;
+  margin: 0;
+}
+
+.sheet {
+  flex: 1;
+  min-height: 0;
+  margin-top: 0.75rem;
+  overflow: auto;
+  text-align: left;
+}
+
+button.file-name {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  background: white;
+  color: #222;
+  text-align: left;
+}
+
+button.file-name.selected {
+  border-color: #222;
+}
+
+button.file-name:disabled {
+  border-color: #ccc;
+  background: white;
+  color: #999;
+}
+
+.file-error {
+  margin: 0.25rem 0 0;
+  color: #9b1c1c;
+}
+
+.raw {
+  margin: 0.75rem 0 0;
+  font: inherit;
+  white-space: pre;
+}
+
+.spin {
+  display: inline-block;
+  margin-left: 0.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
